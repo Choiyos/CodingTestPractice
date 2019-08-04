@@ -38,8 +38,6 @@ namespace CodingTestPractice
             //    Console.WriteLine( item);
             //}
             //Console.WriteLine( solution10_Re("CBD", new string[] { "BACDE", "CBADF", "ADECB", "BDA", "GFDAFC", "CBGFDAF", "BGFDAFC", "YYRECERYYGERYFBYREAFDUT", "CGFBAF" }));
-            #endregion
-
             //foreach (var item in solution11(new int[] { 93, 30, 55 }, new int[] { 1, 30, 5 }))
             //{
             //    Console.WriteLine(item);
@@ -52,8 +50,8 @@ namespace CodingTestPractice
             //Console.WriteLine(solution13("()(((()())(())()))(())"));
 
             //Console.WriteLine(solution14_SIMPLE(new int[] { 9, 8, 2, 3, 5, 6, 9, 8, 3, 4, 6, 2, 9, 3, 8, 5, 6 },15));
-
-
+            #endregion
+            Console.WriteLine(solution15(2, 10, new int[] { 7, 4, 5, 6 }));
         }
 
         #region 이전 작업들
@@ -652,6 +650,31 @@ namespace CodingTestPractice
             return answer;
         }
 
+        public int solution14_Pair(int[] priorities, int location)
+        {
+            int answer = 0;
+            Queue<KeyValuePair<int, int>> que = new Queue<KeyValuePair<int, int>>();
+            for (int i = 0; i < priorities.Length; i++)
+            {
+                que.Enqueue(new KeyValuePair<int, int>(i, priorities[i]));
+            }
+            while (true)
+            {
+                int nMax = que.Max(x => x.Value);
+                var kv = que.Dequeue();
+                if (kv.Value == nMax)
+                {
+                    if (kv.Key == location) return answer + 1;
+                    else
+                    {
+                        answer++;
+                        continue;
+                    }
+                }
+                que.Enqueue(kv);
+            }
+        }
+
         #endregion
 
         #endregion
@@ -661,25 +684,72 @@ namespace CodingTestPractice
         /// 트럭이 막 다리에 올랐을 때, length + 1 만큼 지난 뒤에 도착함.
         /// 
         /// 1. Dequeue한 값을 nowWeight에 더했을 때 넘지 않고, 바로 앞에 자리가 있다면 Enqueue(X) - 자리는 무조건 나게됨.
-        /// 2. 
+        /// 
+        /// 시도1 : 무식하게 index로 트럭마다 length만큼 반복하며 끝날때까지 돌기 - Queue에 올라간 요소를 접근할 방법이 없다.
+        ///  > 요소마다 증가치를 두는 게 아니라 무게가 넘친다면 0을 큐에 넣는 방법으로 현재 length를 확인
         /// </summary>
         /// <param name="bridge_length"></param>
         /// <param name="weight"></param>
         /// <param name="truck_weights"></param>
         /// <returns></returns>
-        static public int solution(int bridge_length, int weight, int[] truck_weights)
+        static public int solution15(int bridge_length, int weight, int[] truck_weights)
         {
-            int answer = 0;
             int nowWeight = 0;
+            int entireTime = 0;
+            int truck = 0;
+            int passedTruck = 0;
+            // 다리를 건너는 트럭.
+            Queue<int> bridge = new Queue<int>();
+            // 대기 트럭.
+            Stack<int> trucks = new Stack<int>();
 
-            Queue bridge = new Queue();
 
-            foreach (var item in truck_weights)
+            for (int i = 0; i < truck_weights.Length; i++)
             {
-                bridge.Enqueue(item);
+                trucks.Push(truck_weights[truck_weights.Length - 1 - i]);
             }
 
-            return answer;
+            // 다리를 지난 트럭과 대기 트럭의 갯수가 같아질 때 까지 반복.
+            while (passedTruck!=truck_weights.Length)
+            {
+                // 트럭을 꺼내야 하는 상태.
+                if (bridge.Count == bridge_length)
+                {
+                    // 다리를 지난 트럭.
+                    truck = bridge.Dequeue();
+                    if (truck != 0)
+                    {
+                        nowWeight -= truck;
+                        passedTruck++;
+                    }
+                }
+
+                // 스택에서 다음 트럭을 꺼내본다.
+                if (trucks.Count > 0)
+                {
+                    truck = trucks.Pop();
+                }
+
+                // 트럭을 올릴 수 있는지 확인한다.
+                if (nowWeight + truck <= weight)
+                {
+                    // 무게 남아서 트럭 다리에 올리기.
+                    bridge.Enqueue(truck);
+                    entireTime++;
+                    nowWeight += truck;
+                }
+                else
+                {
+                    // 무게 초과로 대기.
+                    // 못올라간 자리엔 0이 들어간다.
+                    bridge.Enqueue(0);
+                    // 꺼냈던 트럭을 스택에 다시 넣는다.
+                    trucks.Push(truck);
+                    entireTime++;
+                }
+            }
+
+            return entireTime;
         }
 
         #endregion
