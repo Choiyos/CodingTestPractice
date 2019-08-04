@@ -1,0 +1,7 @@
+C:\Users\choiy\source\repos\CodingTestPractice\CodingTestPractice\bin\Debug\CodingTestPractice.exe.config
+C:\Users\choiy\source\repos\CodingTestPractice\CodingTestPractice\bin\Debug\CodingTestPractice.exe
+C:\Users\choiy\source\repos\CodingTestPractice\CodingTestPractice\bin\Debug\CodingTestPractice.pdb
+C:\Users\choiy\source\repos\CodingTestPractice\CodingTestPractice\obj\Debug\CodingTestPractice.csprojAssemblyReference.cache
+C:\Users\choiy\source\repos\CodingTestPractice\CodingTestPractice\obj\Debug\CodingTestPractice.csproj.CoreCompileInputs.cache
+C:\Users\choiy\source\repos\CodingTestPractice\CodingTestPractice\obj\Debug\CodingTestPractice.exe
+C:\Users\choiy\source\repos\CodingTestPractice\CodingTestPractice\obj\Debug\CodingTestPractice.pdb
